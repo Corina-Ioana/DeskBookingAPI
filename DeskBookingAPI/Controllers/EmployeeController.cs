@@ -7,70 +7,70 @@ namespace DeskBookingAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CompanyController : ControllerBase
+    public class EmployeeController : ControllerBase
     {
         private readonly DeskBookingContext _deskBookingContext;
-
-        public CompanyController(DeskBookingContext deskBookingContext)
+        public EmployeeController(DeskBookingContext deskBookingContext)
         {
             _deskBookingContext = deskBookingContext;
         }
         [HttpPost]
 
-        public IActionResult Create([FromBody] Company company)
+        public IActionResult Create([FromBody] Employee employee)
         {
-            if (company == null)
+            if (employee == null)
             {
                 return BadRequest();
             }
-            _deskBookingContext.Companies.Add(company);
+            _deskBookingContext.Employees.Add(employee);
             _deskBookingContext.SaveChanges();
-            return new JsonResult(company);
+            return new JsonResult(employee);
         }
-
         [HttpGet]
         public IEnumerable GetAll()
         {
 
-            return _deskBookingContext.Companies.ToList();
+            return _deskBookingContext.Employees.ToList();
 
         }
-
         [HttpPut("{id}")]
-        public IActionResult Update(long id, [FromBody] Company company)
+        public IActionResult Update(long id, [FromBody] Employee employee)
         {
-            if (company == null || company.ID != id)
+            if (employee== null || employee.Id != id)
             {
                 return BadRequest();
             }
 
-            var originalcompany = _deskBookingContext.Companies.FirstOrDefault(t => t.ID == id);
-            if (company == null)
+            var originalemployee = _deskBookingContext.Employees.FirstOrDefault(t => t.Id == id);
+            if (employee == null)
             {
                 return NotFound();
             }
 
-            originalcompany.Name = company.Name;
-            originalcompany.Address = company.Address;
+
+            originalemployee.Name = employee.Name;
+            originalemployee.Email = employee.Email;
+            originalemployee.Role = employee.Role;
 
 
-            _deskBookingContext.Companies.Update(originalcompany);
+
+
+            _deskBookingContext.Employees.Update(originalemployee);
             _deskBookingContext.SaveChanges();
             return new NoContentResult();
         }
         [HttpDelete("{id}")]
         public IActionResult Delete(long id)
         {
-            var company = _deskBookingContext.Companies.FirstOrDefault(t => t.ID == id);
-            if (company == null)
+            var employee = _deskBookingContext.Employees.FirstOrDefault(t => t.Id == id);
+            if (employee == null)
             {
                 return NotFound();
             }
 
-            _deskBookingContext.Companies.Remove(company);
+            _deskBookingContext.Employees.Remove(employee);
             _deskBookingContext.SaveChanges();
             return new NoContentResult();
         }
-
     }
 }
